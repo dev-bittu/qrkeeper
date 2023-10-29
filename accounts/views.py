@@ -1,10 +1,10 @@
-from django.contrib.auth.models import User
 from django.shortcuts import redirect, render
 from django.views import View
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from .models import User
 
 # Create your views here.
 class Login(View):
@@ -17,6 +17,11 @@ class Login(View):
     def post(self, request):
         email = request.POST.get("email", "")
         passwd = request.POST.get("password", "")
+
+        if not (User.is_email_valid(email) and User.is_password_valid(passwd)):
+            messages.warning(request, "Email or Password is not valid.")
+            return redirect("accounts:login")
+
         user = authenticate(email=email, password=passwd)
         if user is not None:
             login(request, user)
@@ -47,6 +52,11 @@ class Register(View):
             return redirect("accounts:register")
 
         email = request.POST.get("email", "")
+
+        if not User.is_email_valid(email):
+            messages.warning(request, "Email is not correct")
+            return redirect("accounts:register")
+        
         user = authenticate(email=email, password=passwd1)
 
         if user is None:
@@ -54,7 +64,8 @@ class Register(View):
             user.set_password(passwd1)
             user.save()
             messages.success(request, "User created")
-            return redirect("accounts:login")
+            login(request, user)
+            return redirect("index")
         else:
             messages.info(request, "User already exists.")
             return redirect("accounts:register")
