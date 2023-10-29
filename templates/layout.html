@@ -24,6 +24,9 @@
         </li>
         {% else %}
         <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{% url 'try' %}">Try</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" aria-current="page" href="{% url 'accounts:login' %}">Login</a>
         </li>
         <li class="nav-item">
