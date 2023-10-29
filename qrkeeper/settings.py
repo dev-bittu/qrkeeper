@@ -40,7 +40,8 @@ INSTALLED_APPS = [
 ]
 
 EXTERNAL_APPS = [
-    'accounts.apps.AccountsConfig'
+    'accounts.apps.AccountsConfig',
+    'shorturl.apps.ShorturlConfig',
 ]
 
 INSTALLED_APPS += EXTERNAL_APPS

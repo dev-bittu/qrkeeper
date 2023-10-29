@@ -21,5 +21,6 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("accounts/", include("accounts.urls")),
+    path("url/", include("shorturl.urls")),
     path("", views.Index.as_view(), name="index")
 ]
