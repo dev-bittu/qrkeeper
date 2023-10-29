@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import User
 from django.utils.crypto import get_random_string
+from django.conf import settings
 
 # Create your models here.
 class ShortUrl(models.Model):
@@ -15,7 +16,7 @@ class ShortUrl(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            slug = self.random_slug()
+            slug = self.random_slug(settings.GLOBAL_SETTINGS["short_url_slug_length"])
             self.slug = slug
         super(type(self), self).save(*args, **kwargs)
 
