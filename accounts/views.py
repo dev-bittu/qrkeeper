@@ -12,46 +12,49 @@ class Login(View):
         if request.user.is_authenticated:
             messages.info(request, "You are already login. Logout first")
             return redirect("index")
-        return render(request, "account/login.html")
+        return render(request, "accounts/login.html")
 
     def post(self, request):
-        uname = request.POST.get("username", "")
+        email = request.POST.get("email", "")
         passwd = request.POST.get("password", "")
-        user = authenticate(username=uname, password=passwd)
+        user = authenticate(email=email, password=passwd)
         if user is not None:
             login(request, user)
             messages.success(request, "Logged in")
             return redirect("index")
         else:
             messages.warning(request, "Username or password is incorrect")
-        return render(request, "account/login.html")
+        return render(request, "accounts/login.html")
 
 @method_decorator(login_required, name="dispatch")
 class Logout(View):
     def get(self, request):
         logout(request)
-        return redirect("login")
+        return redirect("accounts:login")
 
 class Register(View):
     def get(self, request):
         if request.user.is_authenticated:
             messages.info(request, "You are already logged in")
             return redirect("index")
-        return render(request, "account/register.html")
+        return render(request, "accounts/register.html")
     
     def post(self, request):
-        uname = request.POST.get("username", "")
-        passwd = request.POST.get("password", "")
-        email = request.POST.get("email", "")
+        passwd1 = request.POST.get("password1", "")
+        passwd2 = request.POST.get("password2", "")
+        if passwd1 != passwd2:
+            messages.warning(request, "Password not match")
+            return redirect("accounts:register")
 
-        user = authenticate(username=uname, password=passwd)
+        email = request.POST.get("email", "")
+        user = authenticate(email=email, password=passwd1)
 
         if user is None:
-            user = User(username=uname, email=email)
-            user.set_password(passwd)
+            user = User(email=email)
+            user.set_password(passwd1)
             user.save()
             messages.success(request, "User created")
-            return redirect("login")
+            return redirect("accounts:login")
         else:
             messages.info(request, "User already exists.")
-            return redirect("register")
+            return redirect("accounts:register")
