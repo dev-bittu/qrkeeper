@@ -6,6 +6,7 @@ from django.utils.crypto import get_random_string
 class ShortUrl(models.Model):
     long_url = models.URLField()
     slug = models.SlugField(unique=True)
+    qr = models.ImageField(upload_to="qr/%Y/%m/%d/")
     visits = models.IntegerField(default=0)
     creator = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
