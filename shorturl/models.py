@@ -8,8 +8,8 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 class ShortUrl(models.Model):
     long_url = models.URLField()
-    slug = models.SlugField(unique=True)
-    qr = models.ImageField(upload_to="qr/%Y/%m/%d/")
+    slug = models.SlugField(unique=True, editable=False)
+    qr = models.ImageField(upload_to="qr/%Y/%m/%d/", editable=False)
     visits = models.IntegerField(default=0)
     creator = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
 
