@@ -14,7 +14,7 @@ class Try(View):
 
     def post(self, request):
         long_url = request.POST.get("long_url", "")
-        if not ShortUrl.is_valid_url(long_url):
+        if not ShortUrl.is_url_valid(long_url):
             messages.warning(request, "Url is not valid")
             return redirect("try")
         
@@ -23,7 +23,10 @@ class Try(View):
             messages.warning(request, "Slug is not valid")
             return redirect("try")
 
-        s = ShortUrl(long_url=long_url)
+        s = ShortUrl(
+            long_url=long_url,
+            creator=request.user if request.user.is_authenticated else None
+        )
         s.slug = slug
         s.save()
         messages.success(request, "Url shorted")
