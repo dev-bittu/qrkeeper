@@ -11,7 +11,7 @@ class ShortUrl(models.Model):
     slug = models.SlugField(unique=True)
     qr = models.ImageField(upload_to="qr/%Y/%m/%d/")
     visits = models.IntegerField(default=0)
-    creator = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    creator = models.ForeignKey(to=User, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f"Url({self.slug}, {self.long_url})"
