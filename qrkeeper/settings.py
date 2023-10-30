@@ -137,5 +137,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.User"
 
 GLOBAL_SETTINGS = {
-    "short_url_slug_length": 5
+    "short_url_slug_length": 5,
+    "host": "http://localhost:8000"
 }
