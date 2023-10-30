@@ -2,6 +2,8 @@ from django.db import models
 from accounts.models import User
 from django.utils.crypto import get_random_string
 from django.conf import settings
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 class ShortUrl(models.Model):
@@ -25,3 +27,12 @@ class ShortUrl(models.Model):
         while type(self).objects.filter(slug=slug).exists():
             slug = get_random_string(length)
         return slug
+
+    @staticmethod
+    def is_url_valid(url):
+        validator = URLValidator()
+        try:
+            validator(url)
+            return True
+        except ValidationError:
+            return False
